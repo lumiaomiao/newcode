@@ -1,0 +1,81 @@
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+/**************************************
+输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。
+路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+**************************************/
+class Solution {
+public:
+	//深度优先搜索
+	//利用形参不改变原来变量值的特性以及引用传参为地址传值的方式
+	//缺点：每次访问新节点temp都要拷贝一次
+    void dfs(TreeNode* root,vector<vector<int>>& result,vector<int> temp,int sum,int expectnumber){
+        if(root==NULL) return;
+        sum += root->val;
+        if(sum > expectnumber) return;
+        else if(sum < expectnumber){
+            temp.push_back(root->val);
+            dfs(root->left, result, temp, sum, expectnumber);
+            dfs(root->right, result, temp, sum, expectnumber);
+        }
+        else if(sum==expectnumber && root->left==NULL && root->right == NULL){
+            temp.push_back(root->val);
+            result.push_back(temp);
+        }
+        
+    }
+    vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+        vector<vector<int>> result;
+        vector<int> temp;
+        dfs(root,result,temp,0,expectNumber);
+        return result;
+    }
+};
+
+
+
+
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+	//深度优先搜索
+	//利用引用传参为地址传值的方式
+    void dfs(TreeNode* root,vector<vector<int>>& result,vector<int>& temp,int sum,int expectnumber){
+        if(root==NULL) return;
+        sum += root->val;
+        if(sum > expectnumber) return;
+        else if(sum < expectnumber){
+            temp.push_back(root->val);
+            dfs(root->left, result, temp, sum, expectnumber);
+            dfs(root->right, result, temp, sum, expectnumber);
+            temp.pop_back();
+        }
+        else if(sum==expectnumber && root->left==NULL && root->right == NULL){
+            temp.push_back(root->val);
+            result.push_back(temp);
+            temp.pop_back();
+        }
+        
+    }
+    vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+        vector<vector<int>> result;
+        vector<int> temp;
+        dfs(root,result,temp,0,expectNumber);
+        return result;
+    }
+};
